@@ -1,5 +1,7 @@
 # LESS官方文档阅读笔记
 
+2015-02-03 by Mr.Raindrop
+
 说明：下图是我根据less 2.3.1官方文档画的less知识点脑图，看这个图可以对less的基本语法和概念有一个大致的了解和初步印象，当然也可以略过脑图直接看下面的文字；如果想看更加详细的脑图（全部结点都展开）可以点图片下面的链接
 
 ![mindmap of learning less](http://7u2loa.com1.z0.glb.clouddn.com/lessMin.jpeg)

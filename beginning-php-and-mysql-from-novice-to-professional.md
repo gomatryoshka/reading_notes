@@ -1,5 +1,7 @@
 # PHP与MySQL程序设计（第四版）读书笔记
 
+2015-01-20 by Mr.Raindrop
+
 ### PHP配置的三种途径
 
 * php.ini
