@@ -1,12 +1,4 @@
----
-layout: post
-title:  "PHP与MySQL程序设计（第四版）读书笔记"
-date:   2015-01-20 23:46:01
-categories: PHP
-tags: [PHP, PHP语法, PHP编程, PHP教程, MySQL]
-author: "Mr.Raindrop"
-header-img: "img/reading-bg.jpg"
----
+# PHP与MySQL程序设计（第四版）读书笔记
 
 ### PHP配置的三种途径
 
@@ -14,17 +6,17 @@ header-img: "img/reading-bg.jpg"
 * httpd.conf（php_value, php_flag, php_admin_value, php_admin_flag，如禁用短标签：``php_admin_flag short_open_tag off``）
 * 在执行脚本中：ini_set()函数，如：
 
-{% highlight PHP startinline %}
+```php
 ini_set('max_execution_time', '60');
-{% endhighlight %}
+```
 
 ### 输入输出
 
 echo 后可跟多个字符串，用逗号分隔，如
 
-{% highlight PHP startinline %}
+```php
 echo "a", "b", "c";
-{% endhighlight %}
+```
 
 #### 双引号和单引号的区别？
 
@@ -43,9 +35,9 @@ echo "a", "b", "c";
 
 精确控制小数位数：
 
-{% highlight php startinline %}
+```php
 printf("<br />%.2f is a float.", 3.1415926);
-{% endhighlight %}
+```
 
 ### 类型
 
@@ -76,9 +68,9 @@ printf("<br />%.2f is a float.", 3.1415926);
 
 * 用echo输出``xxx['abc']``这样的数组或对象变量时，应用大括号括起来，如：
 
-{% highlight PHP startinline %}
+```php
 echo "{$_SERVER['REMOTE_ADDR']}";
-{% endhighlight %}
+```
 
 ### 模块化
 
@@ -119,10 +111,10 @@ php函数定义和js类似，也是使用``function``关键字
 
 #### 使用define()定义常量
 
-{% highlight php startinline %}
+```php
 define('PI', 3.14);
 // 如果对PI赋值：PI = 2; 会直接报错。
-{% endhighlight %}
+```
 
 #### 指定函数的参数类型
 
@@ -130,11 +122,11 @@ define('PI', 3.14);
 
 #### 为函数传递默认参数
 
-{% highlight PHP startinline %}
+```php
 function calc($price, $price2="", $price3="") {
     echo $price + $price2 + $price3;
 }
-{% endhighlight %}
+```
 
 
 ### 数组（关联数组）
@@ -145,50 +137,50 @@ function calc($price, $price2="", $price3="") {
 
 * 关联数组的定义方式：
 
-{% highlight php startinline %}
+```php
 $arr = array("xx"=>"x", "yy"=>"y")``;
-{% endhighlight %}
+```
 
 * php的数组不检查越界，即可以这样：
 
-{% highlight PHP startinline %}
+```php
 $arr[0] = "a";
 $arr[1] = "b";
-{% endhighlight %}
+```
 
 相当于直接定义了：
-{% highlight PHP startinline %}
+```php
 $arr = array("a", "b");
-{% endhighlight %}
+```
 
 * 使用``list()``构造获取函数返回的数组：
 
-{% highlight PHP startinline %}
+```php
 function t() {
     return array(1, 2, 3);
 }
 list($a, $b, $c) = t();
-{% endhighlight %}
+```
 
 ( 用list()提取数组 )
 
 * 使用数值范围定义数组``range()``
 
-{% highlight PHP startinline %}
+```php
 // 等同于$die = array(1, 2, 3, 4, 5, 6);
 $die = range(1, 6);
-{% endhighlight %}
+```
 
 还可设置增长步长:
-{% highlight PHP startinline %}
+```php
 // 等同于$even = array(0, 2, 4, 6, 8, 10);
 $even = range(0, 10, 2);
-{% endhighlight %}
+```
 
 还可用于字符数组：
-{% highlight PHP startinline %}
+```php
 $letters = range("A", "Z");
-{% endhighlight %}
+```
 
 #### 数组操作
 
@@ -200,9 +192,9 @@ $letters = range("A", "Z");
 * ``vprintf()``
 * ``print_r($arr)`` 也可以用于打印对象
 
-{% highlight php startinline %}
+```php
 $str = print_r($arr, TRUE);
-{% endhighlight %}
+```
 
 #### 定位数组元素
 
@@ -227,12 +219,12 @@ $str = print_r($arr, TRUE);
 * ``reset()`` 将指针移动到第一个元素
 * ``array_walk($arr, "func_name")`` 使用自定义函数遍历每个元素
 
-{% highlight PHP startinline %}
+```php
 // 也可以这样
 array_walk($arr, function($value, $key) {
      // ........
 });
-{% endhighlight %}
+```
 
 * ``array_walk_recursive()`` 当涉及到多维数组时可递归遍历
 * ``count($var[, $mod])`` 元素个数
@@ -336,14 +328,14 @@ array_walk($arr, function($value, $key) {
 
 在类中的常量直接用const关键字定义：
 
-{% highlight php startinline %}
+```php
 const PI = '3.1415...';
-{% endhighlight %}
+```
 
 这样使用类中的常量：
-{% highlight php startinline %}
+```php
 echo mathClass::PI;
-{% endhighlight %}
+```
 
 const也可以用在全局作用域下。
 
@@ -412,12 +404,12 @@ const也可以用在全局作用域下。
 
 实现__autoload($class)函数
 
-{% highlight PHP startinline %}
+```php
 // 这里假定类文件路径为'classes/ClassName.class.php'
 function __autoload($class) {
     require_once("classes/$class.class.php");
 }
-{% endhighlight %}
+```
 
 ### PHP高级OOP特性：
 
@@ -433,17 +425,17 @@ function __autoload($class) {
 
 使用``clone``关键字，如：
 
-{% highlight PHP startinline %}
+```php
 destObj = clone targetObj;
-{% endhighlight %}
+```
 
 可以通过修改类的``__clone``方法来修改clone的行为，如：
 
-{% highlight PHP startinline %}
+```php
 function __clone() {
      $this->attr = "xxx";
 }
-{% endhighlight %}
+```
 
 #### 继承
 
@@ -459,7 +451,7 @@ function __clone() {
 
 **PHP5.3对这个问题进行了补救，使用static代替self关键字即可**，如：
 
-{% highlight PHP startinline %}
+```php
 class Base {
      public static $favSport = "Football";
      public static function watchTV() {
@@ -473,15 +465,15 @@ class Child extends Base {
 }
 
 echo Child::watchTV();
-{% endhighlight %}
+```
 
 #### 实现多个接口
 
-{% highlight PHP startinline %}
+```php
 class ClassName implements Interface1, Interface2, Interface3 {
   //...
 }
-{% endhighlight %}
+```
 
 
 #### 命名空间：
@@ -490,21 +482,21 @@ class ClassName implements Interface1, Interface2, Interface3 {
 
 例如，在类库文件开头加上一句： 
 
-{% highlight PHP startinline %}
+```php
 namespace Com\Wjglmore\Library;
-{% endhighlight %}
+```
 
 在使用该类的文件中写上：
 
-{% highlight PHP startinline %}
+```php
 use Com\Wjglmore\Library as WJG;
-{% endhighlight %}
+```
 
 使用其中类时：
 
-{% highlight PHP startinline %}
+```php
 $xxx = new WJG\ClassName();
-{% endhighlight %}
+```
 
 ### 错误和异常处理：
 
@@ -522,25 +514,25 @@ $xxx = new WJG\ClassName();
 
 ``openlog(ident, option, facility)`` 打开系统平台日志器的连接，如：
 
-{% highlight PHP startinline %}
+```php
 openlog("PHP", LOG_ODELAY | LOG_PERROR | LOG_PID, LOG_USER);
-{% endhighlight %}
+```
 
 ``closelog(void)`` 关闭日志连接
 
 ``syslog(prority, message)``  向日志发送消息，如：
 
-{% highlight PHP startinline %}
+```php
 syslog(LOG_WARNING, "example log message.");
-{% endhighlight %}
+```
 
 #### 异常处理：
 
 ``new Exception(message, code, previous)`` 参数都为可选，如：
 
-{% highlight PHP startinline %}
+```php
 new Exception("a error occured.", 4, $e);
-{% endhighlight %}
+```
 
 ``previous``参数的作用：传入导致抛出当前异常的异常，此特性为异常链（异常嵌套），可用此参数创建栈轨迹。
 
@@ -597,13 +589,13 @@ ereg(string pattern, string str);  返回TRUE或FALSE, 如ereg("([^a-z])", $user
 
 其中callback的定义方式如下：
 
-{% highlight PHP startinline %}
+```php
 functon xxxcallback($matches) {
     // 传入的参数$matches为匹配到的项的数组
     if() { ... return ... ; }
     else { ... return ... ; }
 }
-{% endhighlight %}
+```
 
 **``preg_filter``**
 
@@ -668,10 +660,10 @@ functon xxxcallback($matches) {
 
 ``get_html_translation_table`` + ``strtr``的用法：
 
-{% highlight PHP startinline %}
+```php
 $translation = get_html_translation_table(HTML_ENTITIES);
 strstr("sfjljsdjfkjfa<><>&&&", $translation);
-{% endhighlight %}
+```
 
 * ``strstr()``第二个参数还可以使用一个自定义的转换清单，只要定义为联户数组即可
 * ``strip_tags(str[, allowable_tags])``去掉标签。可以指定排除某些标签，如``strip_tags($str, "<a>");``
@@ -708,11 +700,11 @@ strstr("sfjljsdjfkjfa<><>&&&", $translation);
 2. 再安装Validate_US包：``pear install Validate_US-beta``
 3. 使用：
 
-{% highlight PHP startinline %}
+```php
 include "Validate/US.php";
 $validator = new Validate_US();
 $validator->phoneNumber("xxx");
-{% endhighlight %}
+```
 
 ### 使用文件和操作系统：
 
@@ -727,7 +719,7 @@ $validator->phoneNumber("xxx");
 
 #### 查看目录大小：
 
-{% highlight PHP startinline %}
+```php
 function directorySize($directory) {
      $directorySize = 0;
      if ($dh = @opendir($directory)) {
@@ -743,7 +735,7 @@ function directorySize($directory) {
      @closedir($dh);
      return $directorySize;
 }
-{% endhighlight %}
+```
 
 
 * ``fileatime`` 最后访问时间
@@ -813,9 +805,9 @@ function directorySize($directory) {
 
 包的组织规则：按类别，如``Numbers_Roman``包，类别为Numbers，引用时从Numbers文件夹中引入：
 
-{% highlight php startinline %}
+```php
 include_once("Numbers/Roman.php");
-{% endhighlight %}
+```
 
 更新包：
 
@@ -842,12 +834,12 @@ include_once("Numbers/Roman.php");
 
 使用日期时间类：``DateTime``
 
-{% highlight php startinline %}
+```php
 // 获取指定时间
 new DateTime("2013-2-12 14:22:12");
 // 获取当前时间
 $date = new DateTime()
-{% endhighlight %}
+```
 
 * ``$date->format()``
 * ``$date->setDate(int year, int month, int day)``
@@ -881,9 +873,9 @@ pear包：**HTML_QuickForm2**
 
 因为依赖HTML_Common2包，所以安装时要加上自动安装依赖选项：（会自动安装依赖的包）
 
-{% highlight bash %}
+```php
 pear install --onlyreqdeps HTML_QuickForm2
-{% endhighlight %}
+```
 
 ### 14章 身份验证
 
@@ -893,10 +885,10 @@ pear install --onlyreqdeps HTML_QuickForm2
 
 如果没有以上两个值，可以要求用户输入，通过发送特定头和**状态码401**
 
-{% highlight php startinline %}
+```php
 header('WWW-Authenticate: Basic Ream="Secret Stash"');
 header('HTTP/1.0 401 Unauthorized');
-{% endhighlight %}
+```
 
 使用**Auth_HTTP**通过数据库认证用户名密码
 
@@ -979,9 +971,9 @@ DNS、服务器和服务：
 使用PHP脚本发送电子邮件：
 
 ``boolean mail(to, subject, message[, addl_headers, addl_params])`` 如：
-{% highlight php startinline %}
+```php
 mail("test@ex.com", "This is a subject", "This is the mai body", "From:admin@ex.com\r\n");
-{% endhighlight %}
+```
 
 使用pear的**Mail**包和**Mail_Mime**包
 
