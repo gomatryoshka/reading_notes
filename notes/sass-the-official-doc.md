@@ -328,6 +328,31 @@ less使用mixin达到和函数类似的效果，而sass包含@function关键字�
 
 和sass一样，也是使用``@import``来导入文件
 
+#### 四种直接编译为css @import的情况
+
+* 导入文件后缀名为.css
+* 文件路径以http://开头
+* 文件路径为url(...)
+* @import声明带有media query
+
+这四种形式分别如下所示：
+
+```sass
+@import "foo.css";
+@import "http://foo.com/bar";
+@import url(foo);
+@import "foo" screen;
+```
+
+编译后：
+
+```css
+@import url(foo.css);
+@import "http://foo.com/bar";
+@import url(foo);
+@import "foo" screen;
+```
+
 ## 条件语句
 
 | 语言     |         条件判断         |  等于判断    |
