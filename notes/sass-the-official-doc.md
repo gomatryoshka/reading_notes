@@ -235,14 +235,14 @@ div {
 
 ## 继承
 
-| 语言     |         语法         |  仅用于继承的选择器 |
-| -------- | -------------------- | --------------------- |
-| less     |  :extend(.parent);   | 只有仅用于混入的mixin，没有仅用于继承的选择器 |
-| sass     |  @extend:  .parent;  | 使用place holder selectors （%xxx） |
+| 语言     |         语法         |  仅用于继承的选择器 |  继承内嵌选择器 |
+| -------- | -------------------- | --------------------- | ------------------------------------- |
+| less     |  :extend(.parent);   | 只有仅用于混入的mixin，没有仅用于继承的选择器 | :extend(.parent .child); |
+| sass     |  @extend:  .parent;  | 使用place holder selectors （%xxx） | @extend .child; |
 
 sass和less都包含选择器继承，但是用法上稍有区别；less使用``:extend()``伪类作为继承方式，而sass中使用``@extend xxx;``语句
 
-#### place holder selectors
+#### 仅用于继承的选择器：place holder selectors
 
 仅用于继承的选择器，不作为css输出（less中有仅用于继承的mixin）：
 
@@ -264,6 +264,124 @@ sass和less都包含选择器继承，但是用法上稍有区别；less使用``
 }
 
 ```
+
+#### less和sass在继承内嵌选择器上的区别
+
+less可以继承复杂选择器，而sass的继承对象不能是复杂选择器如``.a .b``或者``.a + .b``，因此less和sass在内嵌选择器的匹配规则上区别较大：
+
+less在继承上的匹配是精确匹配，继承的时候必须指定继承的内嵌选择器的名字空间（父选择器）；而sass在匹配上则是尽量满足更多的可匹配选择器，包括自动去内嵌选择器中去寻找可能的匹配，比如：
+
+```sass
+.some-ct .some-class {
+	color: red;
+}
+
+.mine {
+	@extend .some-class;
+}
+```
+
+编译为：
+
+```css
+.some-ct .some-class, .some-ct .mine {
+  color: red;
+}
+```
+
+自动匹配了内嵌的``.some-class``，并做了替代。注意这里``@extend .some-class``如果放在less里（``:extend(.some-class)``）是匹配不到``.some-ct .some-class``的，只有``:extend(.some-ct .some-class)``才可以匹配到。而在sass里只能采取这种方式（``@extend .some-class;``而不是``@extend .some-ct .some-class``），原因是sass里不能继承内嵌的选择器，因此如果用``@extend .some-ct .some-class``就会报错。
+
+```sass
+.some-ct .some-class {
+	color: red;
+}
+
+.mine {
+	@extend .some-ct .some-class;
+}
+```
+
+上面的代码会直接报错：``can't extend nested selectors``
+
+另外，当继承目标选择器的时候，自身是在一个内嵌选择器序列中，则如果继承目标也是在内嵌序列中，则会发生**合并序列**，如下：
+
+```sass
+#admin .tabbar a {
+  font-weight: bold;
+}
+#demo .overview .fakelink {
+  @extend a;
+}
+```
+
+编译后：
+
+```css
+#admin .tabbar a,
+#admin .tabbar #demo .overview .fakelink,
+#demo .overview #admin .tabbar .fakelink {
+  font-weight: bold; }
+```
+
+如果两者序列中包含重合的部分，则会合并重合的部分：
+
+```sass
+#admin .tabbar a {
+  font-weight: bold;
+}
+#admin .overview .fakelink {
+  @extend a;
+}
+```
+
+编译后：
+
+```css
+#admin .tabbar a,
+#admin .tabbar .overview .fakelink,
+#admin .overview .tabbar .fakelink {
+  font-weight: bold; }
+```
+
+#### 多重继承
+
+```sass
+@extend .a;
+@extend .b;
+
+// or
+@extend .a, .b;
+```
+
+#### !optional
+
+继承出错时可以避免报错：如当一个a元素去继承一个h1.xxx的元素，这时会因为a和h1冲突无法继承而报错；加上``!optional;``可以避免报错。
+
+```sass
+#context h1.notice {
+  color: blue;
+  font-weight: bold;
+  font-size: 2em; }
+
+a.important {
+  @extend .notice !optional;
+}
+```
+
+#### 在media内部使用继承
+
+和less一样，在@media内部使用@extend只能匹配到该media块内部的选择器，而不能匹配到外部的选择器
+
+#### @at-root指令
+
+将@at-root { ... }的规则放到根层级去
+
+* @at-root { ... }
+* @at-root (without: media) { ... } 放到@media指令外面去
+* @at-root (without: media supports) { ... } 放到@media和@supports指令外面
+* @at-root (without: rule) { ... } 不带上父选择器
+* @at-root {with: rule} { ... } 带上父选择器
+* @at-root (without: all) { ... } 放到所有指令和规则外
 
 ## mixin
 
@@ -482,4 +600,11 @@ list可以使用list functions做处理
 }
 ```
 
+## 其他指令
+
+@debug 输出一个表达式的值，比如``@debug 10em + 12em;``
+
+@warn 输出一条警告信息，比如``@warn "this is a warning"``
+
+@error 抛出一条错误信息，比如``@error "this is a error"``
 
