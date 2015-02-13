@@ -229,6 +229,10 @@ div {
 }
 ```
 
+#### @midia嵌套
+
+和less一样，@media可以嵌套在css规则集内部，也可以嵌套在另一个@media的里面（类似less的@media冒泡）
+
 ## 继承
 
 | 语言     |         语法         |  仅用于继承的选择器 |
@@ -291,7 +295,7 @@ div {
 
 #### 自定义函数
 
-less使用mixin达到和函数类似的效果，而sass包含@function关键字来定义自定义函数：
+less使用mixin达到和函数类似的效果，而sass使用``@function``关键字来定义自定义函数：
 
 ```sass
 @function sum($a, $b) {
@@ -383,7 +387,7 @@ div {
 
 less里的循环是使用when判断条件，在mixin里先更新条件然后继续调用自身来实现的，类似一般编程语言中的while结构；而sass里实现循环则使用@for、@while或者@each关键字：
 
-#### @for
+#### @for指令
 
 ```sass
 @for $i from 1 through 10 {
@@ -400,7 +404,7 @@ less里的循环是使用when判断条件，在mixin里先更新条件然后继�
 
 两者区别在于through会包括最后的``<end>``而to则不会包含最后的``<end>``
 
-#### @while
+#### @while指令
 
 ```sass
 $i: 0;
@@ -412,7 +416,7 @@ $i: 0;
 }
 ```
 
-#### @each
+#### @each指令
 
 ```sass
 @each $i in 1,2,3,4,5,6,7,8,9,10 {
