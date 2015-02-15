@@ -289,7 +289,7 @@ less在继承上的匹配是精确匹配，继承的时候必须指定继承的�
 }
 ```
 
-自动匹配了内嵌的``.some-class``，并做了替代。注意这里``@extend .some-class``如果放在less里（``:extend(.some-class)``）是匹配不到``.some-ct .some-class``的，只有``:extend(.some-ct .some-class)``才可以匹配到。而在sass里只能采取这种方式（``@extend .some-class;``而不是``@extend .some-ct .some-class``），原因是sass里不能继承内嵌的选择器，因此如果用``@extend .some-ct .some-class``就会报错。
+自动匹配了内嵌的``.some-class``，并做了替代。注意这里``@extend .some-class``如果放在less里（``:extend(.some-class)``）是匹配不到``.some-ct .some-class``的，只有``:extend(.some-ct .some-class)``才可以匹配到。而在sass里只能采取这种方式（``@extend .some-class;``而不是``@extend .some-ct .some-class``），原因是sass里不能继承``.a .b``或``.a + .b``这种带层级的选择器，因此如果用``@extend .some-ct .some-class``就会报错。
 
 ```sass
 .some-ct .some-class {
