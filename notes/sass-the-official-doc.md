@@ -1,4 +1,4 @@
-# Sass官方文档阅读笔记
+# Sass官方文档阅读笔记（和less作简单对照）
 
 2015-02-07 by Mr.Raindrop
 
@@ -359,12 +359,12 @@ less在继承上的匹配是精确匹配，继承的时候必须指定继承的�
 
 ```sass
 #context h1.notice {
-  color: blue;
-  font-weight: bold;
-  font-size: 2em; }
+	color: blue;
+	font-weight: bold;
+	font-size: 2em; }
 
 a.important {
-  @extend .notice !optional;
+	@extend .notice !optional;
 }
 ```
 
@@ -385,14 +385,78 @@ a.important {
 
 ## mixin
 
-| 语言     |         声明         |        调用       |
-| -------- | -------------------- | ------------------ |
-| less     | 不需要单独声明，类选择器和id选择器可以作为mixin | .mixin(); 或 .mixin; |
-| sass     | @mixin xxx { ... }  |   @include xxx;    |
+| 语言     |         声明         |        调用       | 独立规则集作参数 |
+| -------- | -------------------- | ------------------ | ------------------ |
+| less     | 不需要单独声明，类选择器和id选择器可以作为mixin | .mixin(); 或 .mixin; | 作为变量参数 |
+| sass     | @mixin xxx { ... }  |   @include xxx;    | 在@content处作替换 |
 
 less中只要是简单类选择器或者id选择器就可以拿来作为mixin在别的地方调用，调用方式也是简单的``mixin();``，而sass中使用了两个关键字，``@mixin``和``@include``，其中``@mixin``用于声明一个mixin，而``@include``用于调用一个mixin
 
 和less一样，sass也可以向mixin传递参数，也可以设置默认参数值
+
+#### 独立规则集
+
+向mixin传递的参数为独立规则集时，less和sass有点区别，less是当做一个参数传递的，在定义mixin时需要声明一个形参，并在mixin内部调动该形参即可，比如：
+
+```less
+.desktop-and-old-ie(@rules) {
+	@media screen and (min-width: 1200) { @rules(); }
+	html.lt-ie9 &                       { @rules(); }
+}
+
+header {
+	background-color: blue;
+
+	// 这里直接将{ background-color: red; }这个独立规则集传递给了mixin
+	.desktop-and-old-ie({
+	background-color: red;
+	});
+}
+```
+
+而同样的.desktop-and-old-ie(@rules)的在sass里是这样声明的：
+
+```sass
+@mixin desktop-and-old-ie {
+	// 使用@content调用独立规则集
+	@media screen and (min-width: 1200) { @content; }
+	html.lt-ie9 &                       { @content; }
+}
+
+header {
+	background-color: blue;
+
+	// 这里直接将{ background-color: red; }这个独立规则集传递给了mixin
+	// 注意和less的区别，没有括号
+	@include desktop-and-old-ie {
+	background-color: red;
+	};
+}
+```
+
+注意传递独立规则集给mixin的时候，该独立规则集（这里是延用less的名词，在sass里这个叫做**block content**）内部的变量和mixin的作用域是定义该独立规则集的外围作用域，例如：
+
+```sass
+$color: white;
+@mixin colors($color: blue) {
+  background-color: $color;
+  @content;
+  border-color: $color;
+}
+.colors {
+  @include colors { color: $color; }
+}
+```
+
+这里``@include colors { color: $color; }``的$color不会去找mixin内部的``$color:blue``而是找独立规则集外围的作用域``$color:white``，因此编译出来的css如下：
+
+```css
+.colors {
+  background-color: blue;
+  color: white;
+  border-color: blue;
+}
+```
 
 ## 函数
 
@@ -427,6 +491,8 @@ less使用mixin达到和函数类似的效果，而sass使用``@function``关键
 }
 ```
 
+注意``@function``中使用``@return``返回结果
+
 上面的例子在less中可以这样实现：
 
 ```less
@@ -441,6 +507,8 @@ less使用mixin达到和函数类似的效果，而sass使用``@function``关键
 	width: @sum;
 }
 ```
+
+建议：在定义函数时为了方便与变量或者mixin区别开来（避免名字冲突），可以给函数加前缀，比如你是3dobe公司的，定义sum函数，可以使用``-3dobe-sum``作为函数名
 
 #### 函数的参数
 
@@ -495,6 +563,8 @@ div {
 	} 
 }
 ```
+
+**等于**符号和less的差别：less是``=``，而sass是``==``
 
 ## 循环
 
